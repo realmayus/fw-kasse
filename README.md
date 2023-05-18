@@ -1,3 +1,9 @@
+## PWA Assets
+Generate assets using:
+```
+pwa-asset-generator src/lib/images/cash-register-solid.svg static/icons -b "#BA291B" -m static/manifest.json -p "20%" -t png -i src/app.html
+```
+
 # create-svelte
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).

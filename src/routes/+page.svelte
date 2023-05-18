@@ -1,7 +1,24 @@
 <script>
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
+	import {addTransaction, removeTransaction, getTransactions} from "$lib/storage.ts";
+	import {onMount} from "svelte";
+	let isOnline = false;
+	let text = "";
+	let todos = [];
+
+	onMount(() => {
+		todos = getTransactions();
+	});
+
+	const addTodo = () => {
+		const trs = addTransaction({text});
+		todos = [trs, ...todos];
+	}
+
+	const removeTodo = (id) => {
+		removeTransaction(id);
+		todos = todos.filter((t) => t.id !== id);
+	}
+
 </script>
 
 <svelte:head>
@@ -9,51 +26,53 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
-			</picture>
-		</span>
+<svelte:window bind:online={isOnline} />
 
-		to your new<br />SvelteKit app
-	</h1>
+<div class="wrapper">
+	<div class="input">
+		<input type="text" placeholder="Text..." bind:value={text}>
+		<button on:click={addTodo}>+</button>
+	</div>
+	<div class="list">
+	{#each todos as todo}
+		<div class="todo">
+			<p>{todo.text}</p>
+			<button on:click={() => removeTodo(todo.id)}>X</button>
+		</div>
+	{/each}
+	</div>
+</div>
 
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
+<style lang="scss">
+	.wrapper {
+		padding: 40px;
+	}
 
-	<Counter />
-</section>
+	.input {
+		display: flex;
+		gap: 10px;
+		margin-bottom: 40px;
+	}
 
-<style>
-	section {
+	.list {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		gap: 10px;
+	}
+
+	.todo {
+		background-color: #dedede;
+		border: 1px solid gray;
+		display: flex;
+		justify-content: space-between;
 		align-items: center;
-		flex: 0.6;
-	}
+		padding: 10px 20px;
+		width: 400px;
 
-	h1 {
-		width: 100%;
-	}
 
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
+		p {
+			flex-basis: 70%;
+			margin: 0;
+		}
 	}
 </style>
