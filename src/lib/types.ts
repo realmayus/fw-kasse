@@ -4,6 +4,7 @@ export interface Transaction {
 	orders: Order[];
 	options: number;
 	server: boolean;
+	givenMoney?: number;
 }
 
 export enum ArticleCategory {

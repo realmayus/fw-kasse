@@ -53,14 +53,16 @@
 			{#await fetchData()}
 				<p>Laden...</p>
 			{:then _}
-				{#each fetchedTransactions.reverse() as txn, i}
+				{#each fetchedTransactions.sort((a,b) => a.date > b.date ? 1 : -1).reverse() as txn, i}
 					<div>
-						<h3><b>Transaktion Nr. {fetchedTransactions.length - i}</b></h3>
+						<h3><b>Transaktion Nr. {fetchedTransactions.length - i}</b> ({new Intl.DateTimeFormat("de-DE", {dateStyle: "short", timeStyle: "short"}).format(txn.date.toDate())})</h3>
 						{#each txn.orders as order}
 							{@const art = fetchedArticles.find(a => a.id === order.articleId)}
 							<p>{order?.quantity}x {art?.name}  (je {art?.price?.toFixed(2)?.replace(".", ",")}) </p>
 						{/each}
 						<p><b>Preis:</b> {txn.orders.reduce((acc, cur) => acc + cur.quantity * fetchedArticles.find(a => a.id === cur.articleId).price, 0).toFixed(2).replace(".", ",")}€</p>
+						<p><b>Bedienung:</b> {txn.server ? "Ja" : "Nein"}</p>
+						<p><b>Kunde hat gegeben:</b> {txn.givenMoney ? txn.givenMoney.toFixed(2).replace(".", ",") + "€" : "-"}</p>
 					</div>
 				{/each}
 			{:catch err}

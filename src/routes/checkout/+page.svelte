@@ -77,6 +77,7 @@
 			options: 0,
 			orders: $bill.map(b => ({articleId: b.article!.id!, quantity: b.quantity})),
 			server,
+			givenMoney: givenInput > 0 ? givenInput : undefined,
 		};
 		setDoc(docRef, saveTransaction).catch((e) => {
 			console.error(e);
