@@ -1,0 +1,29 @@
+body {
+  margin: 0;
+  height: calc(100dvh - 100px);
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+body, html {
+  font-size:1.1em;
+}
+
+button {
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+input[type="text"],input[type="password"] {
+  padding: 8px 11px;
+  border-radius: 5px;
+  border: 1px solid grey;
+  font-size: 18px;
+}
+
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overscroll-behavior: none;
+  touch-action: manipulation
+}
